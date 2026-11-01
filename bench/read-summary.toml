@@ -1,0 +1,55 @@
+# Read summary benchmark: SEGUL `read summary` vs fastp and FastQC.
+#
+# Paths starting with `~` are expanded. Relative paths are relative to the
+# repo root.
+
+[defaults]
+threads = 8
+repeats = 3
+warmup = 1
+
+[tools.segul]
+# Working-tree release build (`cargo build --release` in segul_repo).
+segul_repo = "~/Codes/Rust/segul"
+dup_size = 100000
+
+[tools.fastp]
+binary = "~/Programs/fastp"
+
+[tools.fastqc]
+binary = "apps/FastQC/fastqc"
+# FastQC modules SEGUL does not compute, set to ignore so both tools compute
+# the same features. Module names follow FastQC's Configuration/limits.txt.
+ignore = ["tile", "kmer"]
+# FastQC truncates reads longer than 75 bp to 50 bp before finding
+# duplicates. SEGUL compares full reads, so set a length longer than any read.
+dup_length = 1000
+
+# What each tool computes in each mode, shown in the notebook next to the
+# plots so readers can judge the comparison.
+[computes]
+"segul minimal" = "Read count only."
+"segul default" = "Read and base counts, length (min/mean/max, N50), GC and N content, base composition, mean/min/max quality, Q20 and Q30 base fractions."
+"segul complete" = "Default plus per-position quality, length/GC/per-read quality distributions, duplication (100,000-sequence sketch), overrepresented sequences, adapter content. Writes CSV files."
+"fastp report" = "Report only (-A -G -Q -L, no -o). Read/base counts, Q20/Q30, GC, per-position quality and base content curves, k-mer counts, insert size (paired). Duplication evaluation off (--dont_eval_duplication). Writes JSON and HTML."
+"fastqc complete" = "Only the modules SEGUL complete also computes: basic statistics, per-base quality (mean and quartiles), per-sequence quality, per-base sequence content, per-sequence GC with theoretical curve, per-base N content, length distribution, duplication levels (first 100,000 distinct sequences, full-length reads via --dup_length), overrepresented sequences, adapter content. Per-tile quality and k-mer content ignored. Writes HTML and a zip of text reports."
+"fastp complete" = "Same as fastp report plus duplication evaluation (default accuracy 1) and overrepresented sequence analysis (-p, every 20th read). No adapter detection because trimming is off (-A)."
+
+# Datasets ---------------------------------------------------------------
+#
+# Each dataset is a folder of gzipped FASTQ files. `pairs` gives the R1/R2
+# suffixes so fastp can run in paired-end mode on whole datasets.
+
+[[datasets]]
+id = "read-tests"
+description = "5 paired Bunomys samples, reads cleaned by fastp, single-stream gzip (SEGUL read-tests set)"
+path = "data/alignments"
+glob = "Bunomys_*/*.fq.gz"
+pairs = ["_R1.fq.gz", "_R2.fq.gz"]
+
+[[datasets]]
+id = "raw-reads"
+description = "3 paired Bunomys samples, raw reads (BGZF compressed)"
+path = "data/raw-reads"
+glob = "*.fq.gz"
+pairs = ["_READ1.fq.gz", "_READ2.fq.gz"]
