@@ -11,8 +11,8 @@ uv sync
 ```
 
 Tools: SEGUL is built from the working tree at `~/Codes/Rust/segul`
-(`cargo build --release`, done by the harness). fastp is read from
-`~/Programs/fastp` and FastQC from `apps/FastQC/`. Paths are set in
+(`cargo build --release`, done by the harness). fastp (v1.4.0) is read
+from `apps/fastp/` and FastQC from `apps/FastQC/`. Paths are set in
 `bench/*.toml`. Datasets live in `data/`.
 
 ## Read summary: SEGUL vs fastp and FastQC

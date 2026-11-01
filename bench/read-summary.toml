@@ -14,7 +14,7 @@ segul_repo = "~/Codes/Rust/segul"
 dup_size = 100000
 
 [tools.fastp]
-binary = "~/Programs/fastp"
+binary = "apps/fastp/fastp"  # v1.4.0 prebuilt from https://opengene.org/fastp/fastp.1.4.0
 
 [tools.fastqc]
 binary = "apps/FastQC/fastqc"

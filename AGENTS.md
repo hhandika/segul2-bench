@@ -49,9 +49,12 @@ how the repository is organized and how to work in it.
     concatenated alignments) for alignment benchmarks.
   - `data/cleaned-reads/`: reserved for cleaned reads.
 - `apps/`: third-party tools installed locally (ignored by git). FastQC is
-  `apps/FastQC/fastqc` (v0.13, runs on the system Java). fastp is the static
-  binary at `~/Programs/fastp`. Point the config to the binaries rather than
-  assuming they are on `PATH`.
+  `apps/FastQC/fastqc` (v0.13, runs on the system Java). fastp is
+  `apps/fastp/fastp` (v1.4.0, the static Linux build from
+  `https://opengene.org/fastp/fastp.<version>`, as the fastp README
+  describes). To update fastp, download the new version into `apps/fastp/`
+  and note the version in `bench/read-summary.toml`. Point the config to the
+  binaries rather than assuming they are on `PATH`.
 - `results/`: raw benchmark output (ignored by git).
   `results/<benchmark>/<date>-<HHMM>-<host>.csv` holds one row per run, with a
   matching `.json` holding machine and tool metadata, and `latest.csv` /
